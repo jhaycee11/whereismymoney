@@ -67,7 +67,7 @@ class ExpenseTrackerSeeder extends Seeder
                 'user_id' => $user->id,
                 'category' => $category,
                 'description' => $description,
-                'amount' => rand(500, 15000) / 100, // Random amount between $5 and $150
+                'amount' => rand(500, 15000), // Random amount between ¥500 and ¥15000
                 'expense_date' => $currentMonth->copy()->subDays(rand(0, 29)),
                 'notes' => $sampleNotes[array_rand($sampleNotes)],
             ]);
@@ -82,7 +82,7 @@ class ExpenseTrackerSeeder extends Seeder
                 'user_id' => $user->id,
                 'category' => $category,
                 'description' => $description,
-                'amount' => rand(500, 15000) / 100,
+                'amount' => rand(500, 15000),
                 'expense_date' => $currentMonth->copy()->subMonths(rand(1, 3))->subDays(rand(0, 29)),
                 'notes' => $sampleNotes[array_rand($sampleNotes)],
             ]);
@@ -107,7 +107,7 @@ class ExpenseTrackerSeeder extends Seeder
                 'user_id' => $user->id,
                 'source' => $source,
                 'description' => $description,
-                'amount' => rand(50000, 500000) / 100, // Random amount between $500 and $5000
+                'amount' => rand(50000, 500000), // Random amount between ¥50000 and ¥500000
                 'income_date' => $currentMonth->copy()->subDays(rand(0, 29)),
             ]);
         }
@@ -121,7 +121,7 @@ class ExpenseTrackerSeeder extends Seeder
                 'user_id' => $user->id,
                 'source' => $source,
                 'description' => $description,
-                'amount' => rand(50000, 500000) / 100,
+                'amount' => rand(50000, 500000),
                 'income_date' => $currentMonth->copy()->subMonths(rand(1, 3))->subDays(rand(0, 29)),
             ]);
         }

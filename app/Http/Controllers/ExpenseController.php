@@ -64,14 +64,14 @@ class ExpenseController extends Controller
         $validated = $request->validate([
             'category' => 'required|string|max:255',
             'description' => 'required|string|max:500',
-            'amount' => 'required|numeric|min:0.01|max:9999999.99',
+            'amount' => 'required|numeric|min:1|max:9999999',
             'expense_date' => 'required|date|before_or_equal:today',
             'notes' => 'nullable|string|max:1000',
         ], [
             'category.required' => 'Please select a category.',
             'description.required' => 'Description is required.',
             'amount.required' => 'Amount is required.',
-            'amount.min' => 'Amount must be greater than 0.',
+            'amount.min' => 'Amount must be at least 1.',
             'expense_date.required' => 'Expense date is required.',
             'expense_date.before_or_equal' => 'Expense date cannot be in the future.',
         ]);
@@ -98,14 +98,14 @@ class ExpenseController extends Controller
         $validated = $request->validate([
             'category' => 'required|string|max:255',
             'description' => 'required|string|max:500',
-            'amount' => 'required|numeric|min:0.01|max:9999999.99',
+            'amount' => 'required|numeric|min:1|max:9999999',
             'expense_date' => 'required|date|before_or_equal:today',
             'notes' => 'nullable|string|max:1000',
         ], [
             'category.required' => 'Please select a category.',
             'description.required' => 'Description is required.',
             'amount.required' => 'Amount is required.',
-            'amount.min' => 'Amount must be greater than 0.',
+            'amount.min' => 'Amount must be at least 1.',
             'expense_date.required' => 'Expense date is required.',
             'expense_date.before_or_equal' => 'Expense date cannot be in the future.',
         ]);

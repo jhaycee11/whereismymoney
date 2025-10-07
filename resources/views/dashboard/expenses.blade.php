@@ -47,7 +47,7 @@
             <h2 class="text-2xl font-bold text-gray-900">Expenses</h2>
             <p class="text-sm text-gray-600">Manage and track all your expenses</p>
         </div>
-        <button onclick="openAddModal()" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+        <button onclick="ExpenseManager.openAddModal()" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
@@ -56,86 +56,110 @@
     </div>
 
     <!-- Search and Filter Section -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-        <form action="{{ route('dashboard.expenses') }}" method="GET" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Description Search -->
-                <div>
-                    <label for="description_search" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <input type="text" 
-                           id="description_search" 
-                           name="description_search" 
-                           value="{{ request('description_search') }}"
-                           placeholder="Search description..."
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200" x-data="{ showFilters: true }">
+        <!-- Filter Toggle Button -->
+        <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+            <h3 class="text-sm font-medium text-gray-900">Search & Filters</h3>
+            <button type="button" 
+                    @click="showFilters = !showFilters"
+                    class="inline-flex items-center text-sm text-indigo-600 hover:text-indigo-700 font-medium">
+                <span x-text="showFilters ? 'Hide Filters' : 'Show Filters'"></span>
+                <svg class="w-4 h-4 ml-1 transition-transform" :class="{'rotate-180': !showFilters}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Filter Form -->
+        <div x-show="showFilters" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 -translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-2"
+             class="p-4">
+            <form action="{{ route('dashboard.expenses') }}" method="GET" class="space-y-4">
+                <!-- Row 1: Description, Amount, Category -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Description Search -->
+                    <div>
+                        <label for="description_search" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <input type="text" 
+                               id="description_search" 
+                               name="description_search" 
+                               value="{{ request('description_search') }}"
+                               placeholder="Search description..."
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                    </div>
+
+                    <!-- Amount Search -->
+                    <div>
+                        <label for="amount_search" class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+                        <input type="number" 
+                               id="amount_search" 
+                               name="amount_search" 
+                               value="{{ request('amount_search') }}"
+                               placeholder="Search amount..."
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                        <select id="category" 
+                                name="category"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                            <option value="all">All Categories</option>
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat }}" {{ request('category') === $cat ? 'selected' : '' }}>
+                                    {{ $cat }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
-                <!-- Amount Search -->
-                <div>
-                    <label for="amount_search" class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
-                    <input type="number" 
-                           id="amount_search" 
-                           name="amount_search" 
-                           step="0.01"
-                           value="{{ request('amount_search') }}"
-                           placeholder="Search amount..."
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                <!-- Row 2: Start Date, End Date -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Start Date -->
+                    <div>
+                        <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                        <input type="date" 
+                               id="start_date" 
+                               name="start_date" 
+                               value="{{ request('start_date') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                    </div>
+
+                    <!-- End Date -->
+                    <div>
+                        <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                        <input type="date" 
+                               id="end_date" 
+                               name="end_date" 
+                               value="{{ request('end_date') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                    </div>
                 </div>
 
-                <!-- Category Filter -->
-                <div>
-                    <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                    <select id="category" 
-                            name="category"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
-                        <option value="all">All Categories</option>
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat }}" {{ request('category') === $cat ? 'selected' : '' }}>
-                                {{ $cat }}
-                            </option>
-                        @endforeach
-                    </select>
+                <!-- Action Buttons -->
+                <div class="flex space-x-3">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Search
+                    </button>
+                    <a href="{{ route('dashboard.expenses') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        Clear Filters
+                    </a>
                 </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Start Date -->
-                <div>
-                    <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-                    <input type="date" 
-                           id="start_date" 
-                           name="start_date" 
-                           value="{{ request('start_date') }}"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
-                </div>
-
-                <!-- End Date -->
-                <div>
-                    <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
-                    <input type="date" 
-                           id="end_date" 
-                           name="end_date" 
-                           value="{{ request('end_date') }}"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="flex space-x-3">
-                <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    Search
-                </button>
-                <a href="{{ route('dashboard.expenses') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                    Clear Filters
-                </a>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
     <!-- Expenses Table -->
@@ -147,9 +171,9 @@
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
-                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -166,8 +190,8 @@
                             <td class="px-6 py-4 text-sm text-gray-900">
                                 {{ $expense->description }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-red-600 text-right">
-                                ${{ number_format($expense->amount, 2) }}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-red-600 text-left">
+                                ¥{{ number_format($expense->amount, 0) }}
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-500">
                                 @if($expense->notes)
@@ -179,10 +203,10 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <button onclick="openEditModal({{ $expense->id }})" class="text-indigo-600 hover:text-indigo-900 mr-3 transition">
+                                <button onclick="ExpenseManager.openEditModal({{ $expense->id }})" class="text-indigo-600 hover:text-indigo-900 mr-3 transition">
                                     Edit
                                 </button>
-                                <button onclick="confirmDelete({{ $expense->id }})" class="text-red-600 hover:text-red-900 transition">
+                                <button onclick="ExpenseManager.confirmDelete({{ $expense->id }})" class="text-red-600 hover:text-red-900 transition">
                                     Delete
                                 </button>
                             </td>
@@ -217,12 +241,12 @@
 </div>
 
 <!-- Add/Edit Expense Modal -->
-<div id="expenseModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" onclick="closeModalOnBackdrop(event)">
+<div id="expenseModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" onclick="ExpenseManager.closeModalOnBackdrop(event)">
     <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-lg bg-white" onclick="event.stopPropagation()">
         <!-- Modal Header -->
         <div class="flex items-center justify-between pb-3 border-b border-gray-200">
             <h3 id="modalTitle" class="text-xl font-semibold text-gray-900">Add Expense</h3>
-            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition">
+            <button onclick="ExpenseManager.closeModal()" class="text-gray-400 hover:text-gray-600 transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
@@ -241,14 +265,14 @@
                     Amount <span class="text-red-500">*</span>
                 </label>
                 <div class="relative">
-                    <span class="absolute left-3 top-2.5 text-gray-500">$</span>
+                    <span class="absolute left-3 top-2.5 text-gray-500">¥</span>
                     <input type="number" 
                            id="amount" 
                            name="amount" 
-                           step="0.01" 
-                           min="0.01"
+                           step="1" 
+                           min="1"
                            required
-                           placeholder="0.00"
+                           placeholder="0"
                            class="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
                 </div>
             </div>
@@ -321,7 +345,7 @@
             <!-- Action Buttons -->
             <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
                 <button type="button" 
-                        onclick="closeModal()"
+                        onclick="ExpenseManager.closeModal()"
                         class="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition">
                     Cancel
                 </button>
@@ -335,7 +359,7 @@
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" onclick="closeDeleteModal()">
+<div id="deleteModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" onclick="ExpenseManager.closeDeleteModal()">
     <div class="relative top-32 mx-auto p-5 border w-full max-w-sm shadow-lg rounded-lg bg-white" onclick="event.stopPropagation()">
         <div class="text-center">
             <svg class="mx-auto h-12 w-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,7 +373,7 @@
                 @method('DELETE')
                 <div class="flex items-center justify-center space-x-3">
                     <button type="button" 
-                            onclick="closeDeleteModal()"
+                            onclick="ExpenseManager.closeDeleteModal()"
                             class="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition">
                         Cancel
                     </button>
@@ -363,91 +387,6 @@
     </div>
 </div>
 
-<script>
-    // Alpine.js for flash message auto-dismiss
-    document.addEventListener('alpine:init', () => {
-        // Already handled in the blade template with x-data
-    });
-
-    // Open Add Modal
-    function openAddModal() {
-        document.getElementById('modalTitle').textContent = 'Add Expense';
-        document.getElementById('submitButtonText').textContent = 'Save Expense';
-        document.getElementById('expenseForm').action = '{{ route("expenses.store") }}';
-        document.getElementById('methodField').value = 'POST';
-        document.getElementById('expenseId').value = '';
-        
-        // Reset form
-        document.getElementById('expenseForm').reset();
-        document.getElementById('expense_date').value = '{{ date("Y-m-d") }}';
-        
-        document.getElementById('expenseModal').classList.remove('hidden');
-    }
-
-    // Open Edit Modal
-    async function openEditModal(expenseId) {
-        try {
-            const response = await fetch(`/dashboard/expenses/${expenseId}`, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json',
-                }
-            });
-            
-            if (!response.ok) throw new Error('Failed to fetch expense data');
-            
-            const expense = await response.json();
-            
-            document.getElementById('modalTitle').textContent = 'Edit Expense';
-            document.getElementById('submitButtonText').textContent = 'Update Expense';
-            document.getElementById('expenseForm').action = `/dashboard/expenses/${expenseId}`;
-            document.getElementById('methodField').value = 'PUT';
-            document.getElementById('expenseId').value = expenseId;
-            
-            // Populate form
-            document.getElementById('amount').value = expense.amount;
-            document.getElementById('modal_category').value = expense.category;
-            document.getElementById('description').value = expense.description;
-            document.getElementById('expense_date').value = expense.expense_date;
-            document.getElementById('notes').value = expense.notes || '';
-            
-            document.getElementById('expenseModal').classList.remove('hidden');
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Failed to load expense data. Please try again.');
-        }
-    }
-
-    // Close Modal
-    function closeModal() {
-        document.getElementById('expenseModal').classList.add('hidden');
-        document.getElementById('expenseForm').reset();
-    }
-
-    // Close modal on backdrop click
-    function closeModalOnBackdrop(event) {
-        if (event.target.id === 'expenseModal') {
-            closeModal();
-        }
-    }
-
-    // Confirm Delete
-    function confirmDelete(expenseId) {
-        document.getElementById('deleteForm').action = `/dashboard/expenses/${expenseId}`;
-        document.getElementById('deleteModal').classList.remove('hidden');
-    }
-
-    // Close Delete Modal
-    function closeDeleteModal() {
-        document.getElementById('deleteModal').classList.add('hidden');
-    }
-
-    // Close modals on ESC key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeModal();
-            closeDeleteModal();
-        }
-    });
-</script>
+<!-- Load Expenses JavaScript Module -->
+<script src="{{ asset('js/expenses.js') }}" defer></script>
 @endsection
