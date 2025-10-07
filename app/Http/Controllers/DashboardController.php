@@ -29,11 +29,11 @@ class DashboardController extends Controller
 
         $netBalance = $totalIncome - $totalExpenses;
 
-        // Get recent expenses (last 10)
+        // Get recent expenses (last 5)
         $recentExpenses = Expense::where('user_id', $user->id)
             ->orderBy('expense_date', 'desc')
             ->orderBy('created_at', 'desc')
-            ->limit(10)
+            ->limit(5)
             ->get();
 
         // Get expense breakdown by category
