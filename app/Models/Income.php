@@ -16,10 +16,11 @@ class Income extends Model
         'description',
         'amount',
         'income_date',
+        'notes',
     ];
 
     protected $casts = [
-        'amount' => 'decimal:2',
+        'amount' => 'integer',
         'income_date' => 'date',
     ];
 
