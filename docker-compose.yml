@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  app:
+    container_name: whereismymoney
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html:cached
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=whereismymoney_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - MAIL_HOST=mail
+      - MAIL_PORT=1025
+    depends_on:
+      - mysql
+      - mail
+    restart: always
+
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=whereismymoney_db
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+
+  mail:
+    container_name: mail
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025" # Web UI
+      - "1025:1025" # SMTP
+    restart: always
+
+volumes:
+  mysql_data:
