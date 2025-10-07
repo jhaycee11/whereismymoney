@@ -43,6 +43,20 @@ class ExpenseTrackerSeeder extends Seeder
             'Healthcare' => ['Doctor visit', 'Pharmacy', 'Gym membership', 'Vitamins', 'Medical tests'],
         ];
 
+        // Sample notes for expenses (some have notes, some don't)
+        $sampleNotes = [
+            null,
+            null,
+            null,
+            'Paid with credit card',
+            'Need to reimburse',
+            'Business expense',
+            'Split with roommate',
+            'Monthly recurring',
+            'Special occasion',
+            'Emergency purchase',
+        ];
+
         // Create expenses for the current month
         $currentMonth = Carbon::now();
         for ($i = 0; $i < 30; $i++) {
@@ -55,6 +69,7 @@ class ExpenseTrackerSeeder extends Seeder
                 'description' => $description,
                 'amount' => rand(500, 15000) / 100, // Random amount between $5 and $150
                 'expense_date' => $currentMonth->copy()->subDays(rand(0, 29)),
+                'notes' => $sampleNotes[array_rand($sampleNotes)],
             ]);
         }
 
@@ -69,6 +84,7 @@ class ExpenseTrackerSeeder extends Seeder
                 'description' => $description,
                 'amount' => rand(500, 15000) / 100,
                 'expense_date' => $currentMonth->copy()->subMonths(rand(1, 3))->subDays(rand(0, 29)),
+                'notes' => $sampleNotes[array_rand($sampleNotes)],
             ]);
         }
 

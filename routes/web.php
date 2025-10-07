@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ExpenseController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -17,9 +18,15 @@ Route::post('/register', [AuthController::class, 'register']);
 // Protected routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard/expenses', [DashboardController::class, 'expenses'])->name('dashboard.expenses');
     Route::get('/dashboard/income', [DashboardController::class, 'income'])->name('dashboard.income');
     Route::get('/dashboard/history', [DashboardController::class, 'history'])->name('dashboard.history');
+    
+    // Expense routes (Resource controller)
+    Route::get('/dashboard/expenses', [ExpenseController::class, 'index'])->name('dashboard.expenses');
+    Route::post('/dashboard/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
+    Route::get('/dashboard/expenses/{expense}', [ExpenseController::class, 'show'])->name('expenses.show');
+    Route::put('/dashboard/expenses/{expense}', [ExpenseController::class, 'update'])->name('expenses.update');
+    Route::delete('/dashboard/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
     
     Route::post('/logout', function () {
         auth()->logout();
