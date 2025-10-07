@@ -17,7 +17,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600">Total Expenses</p>
-                    <p class="mt-2 text-3xl font-bold text-gray-900">${{ number_format($totalExpenses, 2) }}</p>
+                    <p class="mt-2 text-3xl font-bold text-gray-900">¥{{ number_format($totalExpenses, 0) }}</p>
                     <p class="mt-1 text-xs text-gray-500">This month</p>
                 </div>
                 <div class="p-3 bg-red-50 rounded-full">
@@ -33,7 +33,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600">Total Income</p>
-                    <p class="mt-2 text-3xl font-bold text-gray-900">${{ number_format($totalIncome, 2) }}</p>
+                    <p class="mt-2 text-3xl font-bold text-gray-900">¥{{ number_format($totalIncome, 0) }}</p>
                     <p class="mt-1 text-xs text-gray-500">This month</p>
                 </div>
                 <div class="p-3 bg-green-50 rounded-full">
@@ -50,7 +50,7 @@
                 <div>
                     <p class="text-sm font-medium text-gray-600">Net Balance</p>
                     <p class="mt-2 text-3xl font-bold {{ $netBalance >= 0 ? 'text-green-600' : 'text-red-600' }}">
-                        ${{ number_format(abs($netBalance), 2) }}
+                        ¥{{ number_format(abs($netBalance), 0) }}
                     </p>
                     <p class="mt-1 text-xs text-gray-500">Income - Expenses</p>
                 </div>
@@ -87,7 +87,7 @@
                                 <p class="mt-1 text-xs text-gray-500">{{ $expense->expense_date->format('M d, Y') }}</p>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-semibold text-red-600">-${{ number_format($expense->amount, 2) }}</p>
+                                <p class="text-sm font-semibold text-red-600">-¥{{ number_format($expense->amount, 0) }}</p>
                             </div>
                         </div>
                     </div>
@@ -122,7 +122,7 @@
                                     <span class="w-3 h-3 rounded-full mr-2" style="background-color: {{ $loop->index === 0 ? '#4F46E5' : ($loop->index === 1 ? '#6366F1' : ($loop->index === 2 ? '#818CF8' : '#A5B4FC')) }}"></span>
                                     <span class="text-gray-700">{{ $category->category }}</span>
                                 </div>
-                                <span class="font-medium text-gray-900">${{ number_format($category->total, 2) }} ({{ number_format($percentage, 1) }}%)</span>
+                                <span class="font-medium text-gray-900">¥{{ number_format($category->total, 0) }} ({{ number_format($percentage, 1) }}%)</span>
                             </div>
                         @endforeach
                     </div>
@@ -174,7 +174,7 @@
                             if (label) {
                                 label += ': ';
                             }
-                            label += '$' + context.parsed.toFixed(2);
+                            label += '¥' + context.parsed.toFixed(0);
                             return label;
                         }
                     }

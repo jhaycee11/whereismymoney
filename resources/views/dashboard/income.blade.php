@@ -46,7 +46,7 @@
                                 {{ $income->description ?? '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600 text-right">
-                                ${{ number_format($income->amount, 2) }}
+                                ¥{{ number_format($income->amount, 0) }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <button class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</button>

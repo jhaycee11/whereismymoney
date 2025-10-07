@@ -55,7 +55,7 @@
                                 {{ $transaction['description'] ?? '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-right {{ $transaction['type'] === 'expense' ? 'text-red-600' : 'text-green-600' }}">
-                                {{ $transaction['type'] === 'expense' ? '-' : '+' }}${{ number_format($transaction['amount'], 2) }}
+                                {{ $transaction['type'] === 'expense' ? '-' : '+' }}¥{{ number_format($transaction['amount'], 0) }}
                             </td>
                         </tr>
                     @empty
