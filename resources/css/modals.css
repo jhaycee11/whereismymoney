@@ -1,0 +1,48 @@
+/**
+ * Modal Animation Styles
+ * Custom CSS for modal backdrop and content animations
+ */
+
+/* Modal backdrop initial state */
+.modal-backdrop {
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+}
+
+/* Modal backdrop show state */
+.modal-backdrop.modal-show {
+    opacity: 1;
+}
+
+/* Modal backdrop hide state */
+.modal-backdrop.modal-hide {
+    opacity: 0;
+}
+
+/* Modal content initial state */
+.modal-content {
+    opacity: 0;
+    transform: translateY(-1.25rem) scale(0.95);
+    transition: all 200ms ease-out;
+}
+
+/* Modal content show state */
+.modal-backdrop.modal-show .modal-content {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Modal content hide state */
+.modal-backdrop.modal-hide .modal-content {
+    opacity: 0;
+    transform: translateY(-1.25rem) scale(0.95);
+}
+
+/* Enhanced backdrop blur for better visual separation */
+@supports (backdrop-filter: blur(4px)) {
+    .modal-backdrop {
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+}
+

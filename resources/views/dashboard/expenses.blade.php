@@ -241,8 +241,8 @@
 </div>
 
 <!-- Add/Edit Expense Modal -->
-<div id="expenseModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" onclick="ExpenseManager.closeModalOnBackdrop(event)">
-    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-lg bg-white" onclick="event.stopPropagation()">
+<div id="expenseModal" class="modal-backdrop hidden fixed inset-0 bg-gray-900/50 overflow-y-auto h-full w-full z-50" onclick="ExpenseManager.closeModalOnBackdrop(event)">
+    <div class="modal-content relative top-20 mx-auto p-5 border border-gray-200 w-full max-w-md shadow-2xl rounded-lg bg-white" onclick="event.stopPropagation()">
         <!-- Modal Header -->
         <div class="flex items-center justify-between pb-3 border-b border-gray-200">
             <h3 id="modalTitle" class="text-xl font-semibold text-gray-900">Add Expense</h3>
@@ -359,8 +359,8 @@
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" onclick="ExpenseManager.closeDeleteModal()">
-    <div class="relative top-32 mx-auto p-5 border w-full max-w-sm shadow-lg rounded-lg bg-white" onclick="event.stopPropagation()">
+<div id="deleteModal" class="modal-backdrop hidden fixed inset-0 bg-gray-900/50 overflow-y-auto h-full w-full z-50" onclick="ExpenseManager.closeDeleteModal()">
+    <div class="modal-content relative top-32 mx-auto p-5 border border-gray-200 w-full max-w-sm shadow-2xl rounded-lg bg-white" onclick="event.stopPropagation()">
         <div class="text-center">
             <svg class="mx-auto h-12 w-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
@@ -387,6 +387,8 @@
     </div>
 </div>
 
-<!-- Load Expenses JavaScript Module -->
-<script src="{{ asset('js/expenses.js') }}" defer></script>
 @endsection
+
+@push('scripts')
+@vite(['resources/js/expenses.js'])
+@endpush

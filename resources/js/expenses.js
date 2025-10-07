@@ -67,21 +67,49 @@ const MODAL_CONFIG = {
 const getElement = (id) => document.getElementById(id);
 
 /**
- * Show modal by removing hidden class
+ * Show modal with smooth animation
  * @param {string} modalId - Modal element ID
  */
 const showModal = (modalId) => {
     const modal = getElement(modalId);
-    if (modal) modal.classList.remove('hidden');
+    if (!modal) return;
+    
+    // Remove hidden class to make modal visible
+    modal.classList.remove('hidden');
+    
+    // Force reflow to ensure transition works
+    modal.offsetHeight;
+    
+    // Add animation classes
+    requestAnimationFrame(() => {
+        modal.classList.add('modal-show');
+        modal.classList.remove('modal-hide');
+    });
+    
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
 };
 
 /**
- * Hide modal by adding hidden class
+ * Hide modal with smooth animation
  * @param {string} modalId - Modal element ID
  */
 const hideModal = (modalId) => {
     const modal = getElement(modalId);
-    if (modal) modal.classList.add('hidden');
+    if (!modal) return;
+    
+    // Add hide animation classes
+    modal.classList.add('modal-hide');
+    modal.classList.remove('modal-show');
+    
+    // Wait for animation to complete before hiding
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('modal-hide');
+    }, 200); // Match transition duration
+    
+    // Restore body scroll
+    document.body.style.overflow = '';
 };
 
 /**

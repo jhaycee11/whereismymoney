@@ -140,48 +140,17 @@
     </div>
 </div>
 
+@endsection
+
+@push('scripts')
 @if($expenseByCategory->count() > 0)
 <script>
-    const ctx = document.getElementById('expenseChart').getContext('2d');
-    const expenseChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: {!! json_encode($expenseByCategory->pluck('category')) !!},
-            datasets: [{
-                data: {!! json_encode($expenseByCategory->pluck('total')) !!},
-                backgroundColor: [
-                    '#4F46E5',
-                    '#6366F1',
-                    '#818CF8',
-                    '#A5B4FC',
-                    '#C7D2FE',
-                    '#E0E7FF',
-                ],
-                borderWidth: 0,
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    display: false,
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            label += '¥' + context.parsed.toFixed(0);
-                            return label;
-                        }
-                    }
-                }
-            }
-        }
-    });
+    // Pass chart data to the dashboard module
+    window.dashboardChartData = {
+        labels: @json($expenseByCategory->pluck('category')),
+        values: @json($expenseByCategory->pluck('total'))
+    };
 </script>
 @endif
-@endsection
+@vite(['resources/js/dashboard.js'])
+@endpush
