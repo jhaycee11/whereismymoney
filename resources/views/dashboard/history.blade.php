@@ -20,7 +20,6 @@
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                        <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                     </tr>
                 </thead>
@@ -52,16 +51,13 @@
                                     {{ $transaction['category'] }}
                                 </span>
                             </td>
-                            <td class="px-4 lg:px-6 py-4 text-sm text-gray-900">
-                                {{ $transaction['description'] ?? '-' }}
-                            </td>
                             <td class="px-4 lg:px-6 py-4 whitespace-nowrap text-sm font-semibold text-right {{ $transaction['type'] === 'expense' ? 'text-red-600' : 'text-green-600' }}">
                                 {{ $transaction['type'] === 'expense' ? '-' : '+' }}¥{{ number_format($transaction['amount'], 0) }}
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center">
+                            <td colspan="4" class="px-6 py-12 text-center">
                                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                 </svg>
@@ -101,7 +97,6 @@
                                 </span>
                                 <span class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($transaction['date'])->format('M d, Y') }}</span>
                             </div>
-                            <p class="text-sm font-medium text-gray-900 mt-1">{{ $transaction['description'] ?? '-' }}</p>
                         </div>
                         <div class="flex-shrink-0 ml-3">
                             <p class="text-lg font-semibold {{ $transaction['type'] === 'expense' ? 'text-red-600' : 'text-green-600' }} whitespace-nowrap">

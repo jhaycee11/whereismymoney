@@ -56,7 +56,7 @@
     </div>
 
     <!-- Search and Filter Section -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200" x-data="{ showFilters: true }">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200" x-data="{ showFilters: false }">
         <!-- Filter Toggle Button -->
         <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
             <h3 class="text-sm font-medium text-gray-900">Search & Filters</h3>
@@ -80,19 +80,8 @@
              x-transition:leave-end="opacity-0 -translate-y-2"
              class="p-4">
             <form action="{{ route('dashboard.income') }}" method="GET" class="space-y-4">
-                <!-- Row 1: Description, Amount, Source -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Description Search -->
-                    <div>
-                        <label for="description_search" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                        <input type="text" 
-                               id="description_search" 
-                               name="description_search" 
-                               value="{{ request('description_search') }}"
-                               placeholder="Search description..."
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 text-sm">
-                    </div>
-
+                <!-- Row 1: Amount, Source -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Amount Search -->
                     <div>
                         <label for="amount_search" class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
@@ -171,7 +160,6 @@
                     <tr>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
-                        <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -187,9 +175,6 @@
                                 <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
                                     {{ $income->source }}
                                 </span>
-                            </td>
-                            <td class="px-4 lg:px-6 py-4 text-sm text-gray-900">
-                                {{ $income->description }}
                             </td>
                             <td class="px-4 lg:px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600 text-left">
                                 ¥{{ number_format($income->amount, 0) }}
@@ -214,7 +199,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center">
+                            <td colspan="5" class="px-6 py-12 text-center">
                                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
@@ -245,7 +230,6 @@
                                 </span>
                                 <span class="text-xs text-gray-500">{{ $income->income_date->format('M d, Y') }}</span>
                             </div>
-                            <p class="text-sm font-medium text-gray-900">{{ $income->description }}</p>
                             @if($income->notes)
                                 <p class="text-xs text-gray-500 mt-1 line-clamp-2">{{ $income->notes }}</p>
                             @endif
@@ -275,13 +259,13 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <p class="mt-2 text-sm text-gray-500">No income found</p>
-                    <p class="text-xs text-gray-400 mt-1">
-                        @if(request()->hasAny(['description_search', 'amount_search', 'source', 'start_date', 'end_date']))
-                            Try adjusting your filters or <a href="{{ route('dashboard.income') }}" class="text-green-600 hover:text-green-700">clear all filters</a>
-                        @else
-                            Click "Add Income" to create your first entry
-                        @endif
-                    </p>
+                                <p class="text-xs text-gray-400 mt-1">
+                                    @if(request()->hasAny(['amount_search', 'source', 'start_date', 'end_date']))
+                                        Try adjusting your filters or <a href="{{ route('dashboard.income') }}" class="text-green-600 hover:text-green-700">clear all filters</a>
+                                    @else
+                                        Click "Add Income" to create your first entry
+                                    @endif
+                                </p>
                 </div>
             @endforelse
         </div>
@@ -354,20 +338,6 @@
                     <option value="Gift">
                     <option value="Other">
                 </datalist>
-            </div>
-
-            <!-- Description -->
-            <div>
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-                    Description <span class="text-red-500">*</span>
-                </label>
-                <input type="text" 
-                       id="description" 
-                       name="description" 
-                       required
-                       maxlength="500"
-                       placeholder="Enter income description"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 text-sm">
             </div>
 
             <!-- Date -->

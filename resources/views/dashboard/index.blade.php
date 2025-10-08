@@ -76,15 +76,14 @@
             <div class="divide-y divide-gray-200">
                 @forelse($recentExpenses as $expense)
                     <div class="px-4 sm:px-6 py-3 sm:py-4 hover:bg-gray-50 transition-colors">
-                        <div class="flex items-start sm:items-center justify-between gap-2 sm:gap-4">
+                        <div class="flex items-center justify-between gap-2 sm:gap-4">
                             <div class="flex-1 min-w-0">
-                                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                                    <span class="inline-flex self-start px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-800 whitespace-nowrap">
+                                <div class="flex items-center gap-2 sm:gap-3">
+                                    <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-800 whitespace-nowrap">
                                         {{ $expense->category }}
                                     </span>
-                                    <p class="text-sm font-medium text-gray-900 truncate">{{ $expense->description }}</p>
+                                    <p class="text-xs text-gray-500">{{ $expense->expense_date->format('M d, Y') }}</p>
                                 </div>
-                                <p class="mt-1 text-xs text-gray-500">{{ $expense->expense_date->format('M d, Y') }}</p>
                             </div>
                             <div class="flex-shrink-0">
                                 <p class="text-sm font-semibold text-red-600 whitespace-nowrap">-¥{{ number_format($expense->amount, 0) }}</p>

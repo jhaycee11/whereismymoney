@@ -56,7 +56,7 @@
     </div>
 
     <!-- Search and Filter Section -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200" x-data="{ showFilters: true }">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200" x-data="{ showFilters: false }">
         <!-- Filter Toggle Button -->
         <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
             <h3 class="text-sm font-medium text-gray-900">Search & Filters</h3>
@@ -80,19 +80,8 @@
              x-transition:leave-end="opacity-0 -translate-y-2"
              class="p-4">
             <form action="{{ route('dashboard.expenses') }}" method="GET" class="space-y-4">
-                <!-- Row 1: Description, Amount, Category -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Description Search -->
-                    <div>
-                        <label for="description_search" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                        <input type="text" 
-                               id="description_search" 
-                               name="description_search" 
-                               value="{{ request('description_search') }}"
-                               placeholder="Search description..."
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
-                    </div>
-
+                <!-- Row 1: Amount, Category -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Amount Search -->
                     <div>
                         <label for="amount_search" class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
@@ -171,7 +160,6 @@
                     <tr>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                        <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
                         <th scope="col" class="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -187,9 +175,6 @@
                                 <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-800">
                                     {{ $expense->category }}
                                 </span>
-                            </td>
-                            <td class="px-4 lg:px-6 py-4 text-sm text-gray-900">
-                                {{ $expense->description }}
                             </td>
                             <td class="px-4 lg:px-6 py-4 whitespace-nowrap text-sm font-semibold text-red-600 text-left">
                                 ¥{{ number_format($expense->amount, 0) }}
@@ -214,7 +199,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center">
+                            <td colspan="5" class="px-6 py-12 text-center">
                                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
@@ -245,7 +230,6 @@
                                 </span>
                                 <span class="text-xs text-gray-500">{{ $expense->expense_date->format('M d, Y') }}</span>
                             </div>
-                            <p class="text-sm font-medium text-gray-900">{{ $expense->description }}</p>
                             @if($expense->notes)
                                 <p class="text-xs text-gray-500 mt-1 line-clamp-2">{{ $expense->notes }}</p>
                             @endif
@@ -275,13 +259,13 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
                     <p class="mt-2 text-sm text-gray-500">No expenses found</p>
-                    <p class="text-xs text-gray-400 mt-1">
-                        @if(request()->hasAny(['description_search', 'amount_search', 'category', 'start_date', 'end_date']))
-                            Try adjusting your filters or <a href="{{ route('dashboard.expenses') }}" class="text-indigo-600 hover:text-indigo-700">clear all filters</a>
-                        @else
-                            Click "Add Expense" to create your first entry
-                        @endif
-                    </p>
+                                <p class="text-xs text-gray-400 mt-1">
+                                    @if(request()->hasAny(['amount_search', 'category', 'start_date', 'end_date']))
+                                        Try adjusting your filters or <a href="{{ route('dashboard.expenses') }}" class="text-indigo-600 hover:text-indigo-700">clear all filters</a>
+                                    @else
+                                        Click "Add Expense" to create your first entry
+                                    @endif
+                                </p>
                 </div>
             @endforelse
         </div>
@@ -353,20 +337,6 @@
                     <option value="Housing">Housing</option>
                     <option value="Other">Other</option>
                 </select>
-            </div>
-
-            <!-- Description -->
-            <div>
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-                    Description <span class="text-red-500">*</span>
-                </label>
-                <input type="text" 
-                       id="description" 
-                       name="description" 
-                       required
-                       maxlength="500"
-                       placeholder="Enter expense description"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-sm">
             </div>
 
             <!-- Date -->
