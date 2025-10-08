@@ -17,11 +17,6 @@ class IncomeController extends Controller
         $user = Auth::user();
         $query = Income::where('user_id', $user->id);
 
-        // Description search
-        if ($request->filled('description_search')) {
-            $query->where('description', 'like', "%{$request->description_search}%");
-        }
-
         // Amount search
         if ($request->filled('amount_search')) {
             $query->where('amount', 'like', "%{$request->amount_search}%");
@@ -63,13 +58,11 @@ class IncomeController extends Controller
     {
         $validated = $request->validate([
             'source' => 'required|string|max:255',
-            'description' => 'required|string|max:500',
             'amount' => 'required|numeric|min:1|max:9999999',
             'income_date' => 'required|date|before_or_equal:today',
             'notes' => 'nullable|string|max:1000',
         ], [
             'source.required' => 'Please enter an income source.',
-            'description.required' => 'Description is required.',
             'amount.required' => 'Amount is required.',
             'amount.min' => 'Amount must be at least 1.',
             'income_date.required' => 'Income date is required.',
@@ -97,13 +90,11 @@ class IncomeController extends Controller
 
         $validated = $request->validate([
             'source' => 'required|string|max:255',
-            'description' => 'required|string|max:500',
             'amount' => 'required|numeric|min:1|max:9999999',
             'income_date' => 'required|date|before_or_equal:today',
             'notes' => 'nullable|string|max:1000',
         ], [
             'source.required' => 'Please enter an income source.',
-            'description.required' => 'Description is required.',
             'amount.required' => 'Amount is required.',
             'amount.min' => 'Amount must be at least 1.',
             'income_date.required' => 'Income date is required.',

@@ -17,11 +17,6 @@ class ExpenseController extends Controller
         $user = Auth::user();
         $query = Expense::where('user_id', $user->id);
 
-        // Description search
-        if ($request->filled('description_search')) {
-            $query->where('description', 'like', "%{$request->description_search}%");
-        }
-
         // Amount search
         if ($request->filled('amount_search')) {
             $query->where('amount', 'like', "%{$request->amount_search}%");
@@ -63,13 +58,11 @@ class ExpenseController extends Controller
     {
         $validated = $request->validate([
             'category' => 'required|string|max:255',
-            'description' => 'required|string|max:500',
             'amount' => 'required|numeric|min:1|max:9999999',
             'expense_date' => 'required|date|before_or_equal:today',
             'notes' => 'nullable|string|max:1000',
         ], [
             'category.required' => 'Please select a category.',
-            'description.required' => 'Description is required.',
             'amount.required' => 'Amount is required.',
             'amount.min' => 'Amount must be at least 1.',
             'expense_date.required' => 'Expense date is required.',
@@ -97,13 +90,11 @@ class ExpenseController extends Controller
 
         $validated = $request->validate([
             'category' => 'required|string|max:255',
-            'description' => 'required|string|max:500',
             'amount' => 'required|numeric|min:1|max:9999999',
             'expense_date' => 'required|date|before_or_equal:today',
             'notes' => 'nullable|string|max:1000',
         ], [
             'category.required' => 'Please select a category.',
-            'description.required' => 'Description is required.',
             'amount.required' => 'Amount is required.',
             'amount.min' => 'Amount must be at least 1.',
             'expense_date.required' => 'Expense date is required.',

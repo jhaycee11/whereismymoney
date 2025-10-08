@@ -42,18 +42,28 @@
     @endif
 
     <!-- Page Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+    <div class="flex items-center justify-between">
         <div>
             <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Expenses</h2>
             <p class="text-xs sm:text-sm text-gray-600">Manage and track all your expenses</p>
         </div>
-        <button onclick="ExpenseManager.openAddModal()" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition whitespace-nowrap">
-            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Desktop Add Button -->
+        <button onclick="ExpenseManager.openAddModal()" class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition whitespace-nowrap">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
             Add Expense
         </button>
     </div>
+
+    <!-- Mobile Floating Action Button (FAB) -->
+    <button onclick="ExpenseManager.openAddModal()" 
+            class="sm:hidden fixed bottom-6 right-6 z-40 w-14 h-14 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-full shadow-lg hover:shadow-xl active:shadow-md flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-indigo-300"
+            aria-label="Add Expense">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path>
+        </svg>
+    </button>
 
     <!-- Search and Filter Section -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200" x-data="{ showFilters: false }">

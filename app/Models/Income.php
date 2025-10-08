@@ -13,7 +13,6 @@ class Income extends Model
     protected $fillable = [
         'user_id',
         'source',
-        'description',
         'amount',
         'income_date',
         'notes',

@@ -51,8 +51,15 @@
                                     {{ $transaction['category'] }}
                                 </span>
                             </td>
-                            <td class="px-4 lg:px-6 py-4 whitespace-nowrap text-sm font-semibold text-right {{ $transaction['type'] === 'expense' ? 'text-red-600' : 'text-green-600' }}">
-                                {{ $transaction['type'] === 'expense' ? '-' : '+' }}¥{{ number_format($transaction['amount'], 0) }}
+                            <td class="px-4 lg:px-6 py-4 whitespace-nowrap text-right">
+                                <div class="flex flex-col items-end">
+                                    <span class="text-sm font-semibold {{ $transaction['type'] === 'expense' ? 'text-red-600' : 'text-green-600' }}">
+                                        {{ $transaction['type'] === 'expense' ? '-' : '+' }}¥{{ number_format($transaction['amount'], 0) }}
+                                    </span>
+                                    <span class="text-xs font-medium {{ $transaction['running_balance'] >= 0 ? 'text-gray-600' : 'text-red-500' }} mt-1">
+                                        ¥{{ number_format($transaction['running_balance'], 0) }}
+                                    </span>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -98,9 +105,12 @@
                                 <span class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($transaction['date'])->format('M d, Y') }}</span>
                             </div>
                         </div>
-                        <div class="flex-shrink-0 ml-3">
+                        <div class="flex-shrink-0 ml-3 text-right">
                             <p class="text-lg font-semibold {{ $transaction['type'] === 'expense' ? 'text-red-600' : 'text-green-600' }} whitespace-nowrap">
                                 {{ $transaction['type'] === 'expense' ? '-' : '+' }}¥{{ number_format($transaction['amount'], 0) }}
+                            </p>
+                            <p class="text-xs font-medium {{ $transaction['running_balance'] >= 0 ? 'text-gray-600' : 'text-red-500' }} mt-1">
+                                ¥{{ number_format($transaction['running_balance'], 0) }}
                             </p>
                         </div>
                     </div>

@@ -85,8 +85,8 @@ class DashboardController extends Controller
                     'date' => $expense->expense_date,
                     'type' => 'expense',
                     'category' => $expense->category,
-                    'description' => $expense->description,
                     'amount' => $expense->amount,
+                    'created_at' => $expense->created_at,
                 ];
             });
 
@@ -97,14 +97,31 @@ class DashboardController extends Controller
                     'date' => $income->income_date,
                     'type' => 'income',
                     'category' => $income->source,
-                    'description' => $income->description,
                     'amount' => $income->amount,
+                    'created_at' => $income->created_at,
                 ];
             });
 
+        // Sort by date (oldest first) to calculate running balance
         $transactions = $expenses->concat($incomes)
-            ->sortByDesc('date')
+            ->sortBy('date')
+            ->sortBy('created_at')
             ->values();
+
+        // Calculate running balance
+        $runningBalance = 0;
+        $transactions = $transactions->map(function ($transaction) use (&$runningBalance) {
+            if ($transaction['type'] === 'income') {
+                $runningBalance += $transaction['amount'];
+            } else {
+                $runningBalance -= $transaction['amount'];
+            }
+            $transaction['running_balance'] = $runningBalance;
+            return $transaction;
+        });
+
+        // Reverse to show newest first
+        $transactions = $transactions->reverse()->values();
 
         return view('dashboard.history', compact('transactions'));
     }
