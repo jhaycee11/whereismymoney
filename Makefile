@@ -23,6 +23,11 @@ migrate:
 	docker exec -it $(APP_CONTAINER) php artisan migrate --force
 	@echo "✅ Migrations done."
 
+migrate-fresh:
+	@echo "🛠 Running migrations..."
+	docker exec -it $(APP_CONTAINER) php artisan migrate:fresh
+	@echo "✅ Migrations fresh done."
+
 # --------------------------------------------
 # Create sessions table
 sessions:

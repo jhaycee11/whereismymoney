@@ -104,8 +104,10 @@ class DashboardController extends Controller
 
         // Sort by date (oldest first) to calculate running balance
         $transactions = $expenses->concat($incomes)
-            ->sortBy('date')
-            ->sortBy('created_at')
+            ->sortBy([
+                ['date', 'asc'],
+                ['created_at', 'asc']
+            ])
             ->values();
 
         // Calculate running balance

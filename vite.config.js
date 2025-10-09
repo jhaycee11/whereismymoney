@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/js/dashboard.js',
                 'resources/js/expenses.js',
                 'resources/js/income.js',
+                'resources/js/settings.js',
             ],
             refresh: true,
         }),

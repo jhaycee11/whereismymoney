@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\SettingsController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -34,6 +35,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/income/{income}', [IncomeController::class, 'show'])->name('income.show');
     Route::put('/dashboard/income/{income}', [IncomeController::class, 'update'])->name('income.update');
     Route::delete('/dashboard/income/{income}', [IncomeController::class, 'destroy'])->name('income.destroy');
+    
+    // Settings routes (Recurring Transactions)
+    Route::get('/dashboard/settings', [SettingsController::class, 'index'])->name('dashboard.settings');
+    Route::post('/dashboard/settings/recurring', [SettingsController::class, 'store'])->name('recurring.store');
+    Route::get('/dashboard/settings/recurring/{recurringTransaction}', [SettingsController::class, 'show'])->name('recurring.show');
+    Route::put('/dashboard/settings/recurring/{recurringTransaction}', [SettingsController::class, 'update'])->name('recurring.update');
+    Route::post('/dashboard/settings/recurring/{recurringTransaction}/toggle', [SettingsController::class, 'toggleStatus'])->name('recurring.toggle');
+    Route::delete('/dashboard/settings/recurring/{recurringTransaction}', [SettingsController::class, 'destroy'])->name('recurring.destroy');
     
     Route::post('/logout', function () {
         auth()->logout();
